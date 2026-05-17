@@ -2,7 +2,7 @@
 
 Um clone minimalista do [Monkeytype](https://monkeytype.com/). Projeto construído com AI.
 
-**[Acesse o projeto aqui](https://zen-type.vercel.app)**
+**[Acesse o projeto aqui](https://zen-type-tau.vercel.app/)**
 
 ## How to run
 
