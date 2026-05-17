@@ -1,6 +1,6 @@
 # Zen Type
 
-Um clone minimalista do [Monkeytype](https://monkeytype.com/). Projeto construído com AI.
+Um clone minimalista do [Monkeytype](https://monkeytype.com/) focado na língua portuguesa. Feito com AI.
 
 **[Acesse o projeto aqui](https://zen-type-tau.vercel.app/)**
 
