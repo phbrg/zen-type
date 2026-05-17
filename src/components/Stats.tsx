@@ -6,6 +6,7 @@ interface StatsProps {
   reset: () => void;
 }
 
+// @ts-ignore
 const Stats: React.FC<StatsProps> = ({ stats, reset }) => {
   return (
     <div className="flex flex-col items-center justify-center animate-fade-in w-full max-w-3xl">
