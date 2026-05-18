@@ -21,7 +21,6 @@ const TypingArea: React.FC<TypingAreaProps> = ({ words, userInput, timeLeft, mod
   }, [words]);
 
   const activeWordIndex = useMemo(() => userInput.split(' ').length - 1, [userInput]);
-
   const [firstVisibleWordIndex, setFirstVisibleWordIndex] = useState<number>(0);
   const wordRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -69,16 +68,16 @@ const TypingArea: React.FC<TypingAreaProps> = ({ words, userInput, timeLeft, mod
   const visibleWords = wordsData.slice(firstVisibleWordIndex, firstVisibleWordIndex + visibleWordsCount);
 
   return (
-    <div className="relative w-full max-w-4xl flex flex-col items-center outline-none">
+    <div className="relative w-full max-w-5xl flex flex-col items-center outline-none">
       {mode === 'time' && (
-        <div className="w-full text-left text-2xl font-semibold text-[var(--color-primary)] mb-4">
+        <div className="w-full text-center md:text-left text-2xl text-[var(--color-primary)] mb-4">
           {timeLeft}
         </div>
       )}
 
-      <div className="relative w-full overflow-hidden h-[150px]">
+      <div className="relative w-full overflow-hidden h-[170px]">
         <div 
-          className="flex flex-wrap text-[1.75rem] leading-relaxed font-medium text-left cursor-default content-start"
+          className="flex flex-wrap justify-start text-[2.15rem] leading-relaxed font-medium text-center cursor-default content-start"
           style={{ color: 'var(--color-text)' }}
         >
           {visibleWords.map((wordObj) => {
@@ -87,7 +86,7 @@ const TypingArea: React.FC<TypingAreaProps> = ({ words, userInput, timeLeft, mod
                 key={wordObj.id}
                 // @ts-ignore
                 ref={(el) => (wordRefs.current[wordObj.id] = el)}
-                className="mr-[0.6em] mb-2 flex relative"
+                className="mx-[0.3em] mb-2 flex relative"
               >
                 {wordObj.word.split('').map((char, i) => {
                   const globalIndex = wordObj.startIndex + i;

@@ -24,6 +24,7 @@ export const useTyping = (initialTime: number, mode: GameMode, useAccents: boole
   const [userInput, setUserInput] = useState<string>('');
   const [status, setStatus] = useState<GameStatus>('idle');
   const [timeLeft, setTimeLeft] = useState<number>(initialTime);
+  const [isInactive, setIsInactive] = useState<boolean>(false);
 
   const startTimeRef = useRef<number | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -34,6 +35,8 @@ export const useTyping = (initialTime: number, mode: GameMode, useAccents: boole
     setUserInput('');
     setStatus('idle');
     setTimeLeft(initialTime);
+    setIsInactive(false);
+    
     startTimeRef.current = null;
     if (timerRef.current) clearInterval(timerRef.current);
   }, [initialTime, useAccents]);
@@ -51,6 +54,7 @@ export const useTyping = (initialTime: number, mode: GameMode, useAccents: boole
 
   const finishGame = useCallback(() => {
     setStatus('finished');
+    setIsInactive(false);
     if (timerRef.current) clearInterval(timerRef.current);
   }, []);
 
@@ -72,6 +76,18 @@ export const useTyping = (initialTime: number, mode: GameMode, useAccents: boole
   }, [status, mode, finishGame]);
 
   useEffect(() => {
+    if (status !== 'typing') return;
+
+    setIsInactive(false);
+
+    const timer = setTimeout(() => {
+      setIsInactive(true);
+    }, 2000); 
+
+    return () => clearTimeout(timer);
+  }, [userInput, status]);
+
+  useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (status === 'finished') {
         if (e.key === 'Tab') {
@@ -81,8 +97,12 @@ export const useTyping = (initialTime: number, mode: GameMode, useAccents: boole
         return;
       }
 
-      if (e.key === 'Escape') return generateText();
-      if (['Shift', 'Control', 'Alt', 'Meta', 'CapsLock', 'Tab'].includes(e.key)) return;
+      if (e.key === 'Escape' || e.key === 'Tab') {
+        e.preventDefault();
+        return generateText();
+      }
+      
+      if (['Shift', 'Control', 'Alt', 'Meta', 'CapsLock'].includes(e.key)) return;
 
       if (e.key === 'Backspace') {
         setUserInput((prev) => prev.slice(0, -1));
@@ -100,7 +120,7 @@ export const useTyping = (initialTime: number, mode: GameMode, useAccents: boole
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [status, words, mode, generateText, finishGame]);
+  }, [status, words, generateText]);
 
   const calculateStats = (): GameStats => {
     let correct = 0;
@@ -126,5 +146,5 @@ export const useTyping = (initialTime: number, mode: GameMode, useAccents: boole
     return { wpm, accuracy, correct, incorrect, extras: 0 };
   };
 
-  return { words, userInput, status, timeLeft, stats: calculateStats(), reset: generateText };
+  return { words, userInput, status, timeLeft, stats: calculateStats(), reset: generateText, isInactive };
 };
