@@ -47,6 +47,8 @@ const Home: React.FC = () => {
                 userInput={userInput} 
                 timeLeft={timeLeft}
                 mode={mode}
+                // @ts-ignore
+                stats={stats}
               />
 
               <div 
@@ -70,7 +72,7 @@ const Home: React.FC = () => {
         
         <footer className="w-full flex justify-center items-center py-8 mt-auto text-sm">
           <a 
-            href="https://github.com/phbrg/zen-type"
+            href="https://github.com/SEU_USUARIO/SEU_REPOSITORIO"
             target="_blank" 
             rel="noopener noreferrer"
             className="flex items-center gap-3 text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors opacity-80 hover:opacity-100"

@@ -1,14 +1,15 @@
 import React, { useMemo, useRef, useEffect, useState } from 'react';
-import type { GameMode } from '../hooks/useTyping';
+import type { GameMode, GameStats } from '../hooks/useTyping';
 
 interface TypingAreaProps {
   words: string;
   userInput: string;
   timeLeft: number;
   mode: GameMode;
+  stats: GameStats;
 }
 
-const TypingArea: React.FC<TypingAreaProps> = ({ words, userInput, timeLeft, mode }) => {
+const TypingArea: React.FC<TypingAreaProps> = ({ words, userInput, timeLeft, mode, stats }) => {
   const wordsData = useMemo(() => {
     const wordArray = words.split(' ');
     let currentIndex = 0;
@@ -69,11 +70,29 @@ const TypingArea: React.FC<TypingAreaProps> = ({ words, userInput, timeLeft, mod
 
   return (
     <div className="relative w-full max-w-5xl flex flex-col items-center outline-none">
-      {mode === 'time' && (
-        <div className="w-full text-center md:text-left text-2xl text-[var(--color-primary)] mb-4">
-          {timeLeft}
-        </div>
-      )}
+      
+      <div className="w-full flex items-center justify-start mb-6 min-h-[2rem]">
+        {mode === 'time' ? (
+          <div className="pl-1.5 text-2xl font-semibold text-[var(--color-primary)]">
+            {timeLeft}
+          </div>
+        ) : (
+          <div className={`pl-2 flex justify-start items-center gap-8 transition-opacity duration-500 ${userInput.length > 0 ? 'opacity-100' : 'opacity-0'}`}>
+            <div className="flex flex-col items-center">
+              <span className="text-[var(--color-text)] text-xs uppercase tracking-widest mb-1">wpm</span>
+              <span className="text-[var(--color-primary)] text-3xl font-bold leading-none">{stats.wpm}</span>
+            </div>
+            <div className="flex flex-col items-center">
+              <span className="text-[var(--color-text)] text-xs uppercase tracking-widest mb-1">certas</span>
+              <span className="text-[var(--color-primary)] text-3xl font-bold leading-none">{stats.correct}</span>
+            </div>
+            <div className="flex flex-col items-center">
+              <span className="text-[var(--color-text)] text-xs uppercase tracking-widest mb-1">erros</span>
+              <span className="text-[var(--color-error)] text-3xl font-bold leading-none">{stats.incorrect}</span>
+            </div>
+          </div>
+        )}
+      </div>
 
       <div className="relative w-full overflow-hidden h-[170px]">
         <div 
